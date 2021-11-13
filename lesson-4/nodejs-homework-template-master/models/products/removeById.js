@@ -1,15 +1,15 @@
 const getAll = require("./getAll");
 const updateProducts = require("./updateProducts")
 
-const updateById = async(id, data) => {
+const removeById = async(id)=> {
     const products = await getAll();
     const idx = products.findIndex(item => item.id === id);
     if(idx === -1){
         return null;
     }
-    products[idx] = {...data, id};
+    const removeProduct = products.splice(idx, 1);
     await updateProducts(products);
-    return  products[idx];
+    return removeProduct;
 }
 
-module.exports = updateById;
+module.exports = removeById
