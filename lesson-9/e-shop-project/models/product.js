@@ -21,7 +21,6 @@ const productSchema = Schema({
     }
 }, {versionKey: false, timestamps: true});
 
-
 const joiSchema = Joi.object({
     name: Joi.string().required(),
     price: Joi.number().min(0.01).required(),
