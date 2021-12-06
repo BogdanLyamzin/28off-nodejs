@@ -17,7 +17,7 @@
             .then(({data})=> {
                 const productElements = data.map(item => `<div>
                     <h5>${item.name}</h5>
-                    <img src="http://localhost:3000/${item.src}" /></div>`).join();
+                    <img src="http://localhost:3000/${item.image}" /></div>`).join();
                 productsContainer.insertAdjacentHTML("beforeend", productElements)
             })
             .catch(error => console.log(error.message));

@@ -7,9 +7,17 @@
     <title>Document</title>
 </head>
 <body>
-
+    <form id="form" action="" enctype="multipart/form-data">
+        <input name="file" type="file" multiple>
+        <button type="submit">Отправить</button>
+    </form>
     <script>
-
+        const form = document.getElementById("form");
+        form.addEventListener("submit", function(e){
+            e.preventDefault();
+            const data = new FormData();
+            data.append("file", this.elements.file.files[0]);
+        })
     </script>
 </body>
 </html>
