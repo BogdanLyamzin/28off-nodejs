@@ -1,6 +1,7 @@
 const {Conflict} = require("http-errors");
-const bcrypt = require("bcryptjs");
+const {nanoid} = require("nanoid");
 
+const {sendMail} = require("../../helpers");
 const {User} = require("../../models");
 
 const register = async(req, res)=> {
@@ -9,29 +10,28 @@ const register = async(req, res)=> {
     if(user){
         throw new Conflict("Already exist")
     }
-    const newUser = new User({email});
-    /*
-    newUser = {
-        email
-    }
-    */
+    const verificationToken = nanoid();
+    const newUser = new User({email, verificationToken});
+
     newUser.setPassword(password);
-        /*
-    newUser = {
-        email,
-        password
-    }
-    */
+
     newUser.save();
-    // const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-    // const newUser = await User.create({email, password: hashPassword});
+
+    const mail = {
+        to: email,
+        subject: "Подтверждение email",
+        html: `<a href="http://localhost:3000/api/users/verify/${verificationToken}">Нажмите для подтверждения</a>`
+    };
+
+    await sendMail(mail);
 
     res.status(201).json({
         status: "success",
         code: 201,
         data: {
             user: {
-                email
+                email,
+                verificationToken
             }
         }
     })

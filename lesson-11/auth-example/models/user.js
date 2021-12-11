@@ -1,24 +1,32 @@
-const {Schema, model} = require("mongoose");
+const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const bcrypt = require("bcryptjs")
 
 const userSchema = Schema({
     email: {
-       type: String,
-       required: true 
+        type: String,
+        required: true
     },
     password: {
         type: String,
         required: true,
         minlength: 6
-    }
-}, {versionKey: false, timestamps: true});
+    },
+    verify: {
+        type: Boolean,
+        default: false,
+    },
+    verificationToken: {
+        type: String,
+        required: [true, 'Verify token is required'],
+    },
+}, { versionKey: false, timestamps: true });
 
-userSchema.methods.setPassword = function(password){
+userSchema.methods.setPassword = function (password) {
     this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
 }
 
-userSchema.methods.comparePassword = function(password){
+userSchema.methods.comparePassword = function (password) {
     return bcrypt.compareSync(password, this.password)
 }
 
